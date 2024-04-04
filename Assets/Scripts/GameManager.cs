@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject bombObject; //prefab of the bomb
     public List<Rigidbody2D> rigidBodies; //collection of all physics bodies
 
+    private GameObject currentBomb;
+
     private bool clickPong = false; //click pingpong
 
     void Start()
@@ -19,14 +21,16 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        Vector2 mousePosition = Input.mousePosition; //get mouse pos
         if (Input.GetKeyDown(KeyCode.Mouse0)) //if clicked
         {
             if (!clickPong)
             {
-                Vector2 mousePosition = Input.mousePosition; //get mouse pos
                 clickPong = true; //prevent spawning until click is released
-                Instantiate(bombObject, //spawn a bomb
-                    Camera.main.ScreenToWorldPoint(mousePosition), //at world pos of click
+                Vector3 bombSpawnPos = Camera.main.ScreenToWorldPoint(mousePosition); //worldspace pos from screenspace
+                bombSpawnPos = new Vector3(bombSpawnPos.x, bombSpawnPos.y); //remove z value
+                currentBomb = Instantiate(bombObject, //spawn a bomb
+                    bombSpawnPos, //at world pos of click
                     Quaternion.identity); //with "no" rotation
             }
         }
@@ -34,7 +38,21 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse0)) //if not clicking
         {
             if (clickPong)
+            {
                 clickPong = false; //allow spawning again when clicked
+                if (currentBomb != null)
+                {
+                    currentBomb.GetComponent<Bomb>().Activate();
+                    currentBomb = null;
+                }
+            }
+        }
+
+        if (currentBomb != null)
+        {
+            Vector3 bombNewPos = Camera.main.ScreenToWorldPoint(mousePosition); //worldspace pos from screenspace
+            bombNewPos = new Vector3(bombNewPos.x, bombNewPos.y); //remove z value
+            currentBomb.transform.position = bombNewPos;
         }
     }
 
