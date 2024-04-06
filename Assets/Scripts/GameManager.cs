@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class GameManager : MonoBehaviour
     public List<Rigidbody2D> rigidBodies; //collection of all physics bodies
 
     private GameObject currentBomb;
-
+    private int currentScore = 0;
     private bool clickPong = false; //click pingpong
 
     void Start()
@@ -42,8 +43,9 @@ public class GameManager : MonoBehaviour
                 clickPong = false; //allow spawning again when clicked
                 if (currentBomb != null)
                 {
-                    currentBomb.GetComponent<Bomb>().Activate();
-                    currentBomb = null;
+                    currentBomb.GetComponent<Bomb>().Activate(); //tell bomb to explode
+                    currentBomb = null; //remove dangling pointer
+                    currentScore -= 5;
                 }
             }
         }
@@ -67,5 +69,10 @@ public class GameManager : MonoBehaviour
             rb2d.AddForceAtPosition(direction.normalized * Mathf.Max((1f - Mathf.Pow(direction.magnitude/Dmax, 2f)) * Fmax, 0f),
                 position); //apply calulated (explosion) force at provided position
         }
+    }
+
+    public void AddScore(int score)
+    {
+        currentScore += score; //increase the score
     }
 }
