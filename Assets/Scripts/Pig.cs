@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Pig : MonoBehaviour
     private GameManager gameManager; //scene game manager
     bool shouldBreak = false; //should the plank be broken
     int hitCount = 0;
+    int gmIndex = -1;
 
     void Start()
     {
@@ -18,13 +20,21 @@ public class Pig : MonoBehaviour
 
     void Update()
     {
-        if (rigidBody.velocity.magnitude >= 3f) //if moving sufficiently fast (simple force check)
-            shouldBreak = true; //start breaking code
-        if (shouldBreak)
+        if (gmIndex == -1) //if not yet added to array
         {
-            Instantiate(breakParticles, transform.position, Quaternion.identity); //spawn particles where plank was
-            gameManager.AddScore(10); //increase score when plank is broken
-            Destroy(gameObject); //remove plank
+            gmIndex = gameManager.AddRigidBody(rigidBody); //add to array on game manager
+        }
+        else
+        {
+            if (rigidBody.velocity.magnitude >= 3f) //if moving sufficiently fast (simple force check)
+                shouldBreak = true; //start breaking code
+            if (shouldBreak)
+            {
+                Instantiate(breakParticles, transform.position, Quaternion.identity); //spawn particles where plank was
+                gameManager.AddScore(50); //increase score when pig is broken
+                gameManager.rigidBodies[gmIndex] = null; //remove rb from game manager array
+                Destroy(gameObject); //remove pig
+            }
         }
     }
     public void Hit(float velocity)

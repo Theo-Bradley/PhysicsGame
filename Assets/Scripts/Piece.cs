@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngineInternal;
 
 public class Piece : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Piece : MonoBehaviour
     public GameObject breakParticles; //prefab to spank when plank is broken
     private GameManager gameManager; //scene game manager
     bool shouldBreak = false; //should the plank be broken
+    int gmIndex = -1; //my index in the rigidbodies array on game manager
 
     void Start()
     {
@@ -16,13 +18,21 @@ public class Piece : MonoBehaviour
 
     void Update()
     {
-        if (rigidBody.velocity.magnitude >= 2.5f) //if moving sufficiently fast (simple force check)
-            shouldBreak = true; //start breaking code
-        if (shouldBreak)
+        if (gmIndex == -1) //if not yet added to array
         {
-            Instantiate(breakParticles, transform.position, Quaternion.identity); //spawn particles where plank was
-            gameManager.AddScore(10); //increase score when plank is broken
-            Destroy(gameObject); //remove plank
+            gmIndex = gameManager.AddRigidBody(rigidBody); //add to array on game manager
+        }
+        else
+        {
+            if (rigidBody.velocity.magnitude >= 5f) //if moving sufficiently fast (simple force check)
+                shouldBreak = true; //start breaking code
+            if (shouldBreak)
+            {
+                Instantiate(breakParticles, transform.position, Quaternion.identity); //spawn particles where plank was
+                gameManager.AddScore(10); //increase score when plank is broken
+                gameManager.rigidBodies[gmIndex] = null; //remove rigidbody from the array on game manager
+                Destroy(gameObject); //remove plank
+            }
         }
     }
 }

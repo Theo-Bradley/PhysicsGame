@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class Bird : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Rigidbody2D rigidBody;
+    private GameManager gameManager;
+    int gmIndex = -1;
+
     void Start()
     {
-        
+        gameManager = FindObjectOfType<GameManager>(); //aquire the game manager
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (gmIndex == -1) //if not yet added to array
+        {
+            gmIndex = gameManager.AddRigidBody(rigidBody); //add to array on game manager
+        }
+        else
+        {
+            //fill with standard running code
+            //when should destroy
+            //gameManager.rigidBodies[gmIndex] = null;
+        }
     }
 }

@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
@@ -8,7 +9,10 @@ using UnityEngine.SocialPlatforms.Impl;
 public class GameManager : MonoBehaviour
 {
     public GameObject bombObject; //prefab of the bomb
-    public List<Rigidbody2D> rigidBodies; //collection of all physics bodies
+    public Rigidbody2D[] rigidBodies; //collection of all physics bodies
+    public int rigidBodiesCount = 0;
+    public Canvas uiCanvas; //UI Canvas
+    public TMP_Text scoreText; //Score text number
 
     private GameObject currentBomb;
     private int currentScore = 0;
@@ -18,6 +22,7 @@ public class GameManager : MonoBehaviour
     {
         //rigidBodies = new List<Rigidbody2D>(); //removed for testing.. later add to initalize list, then when a new
         //rb is spawned please add code to add it's rb to this list, and add code to prune it when/if they are destroyed
+        rigidBodies = new Rigidbody2D[128];
     }
 
     void Update()
@@ -61,18 +66,29 @@ public class GameManager : MonoBehaviour
     public void Explode(Vector2 position)
     {
         Vector2 direction;
-        const float Dmax = 5f; //max distance //both of these values will change the gradient
+        const float Dmax = 2f; //max distance //both of these values will change the gradient
         const float Fmax = 200; //max force
         foreach (Rigidbody2D rb2d in rigidBodies) //loop over rigidbodies
         {
-            direction = rb2d.position - position; //get (un-normalized) direction vector
-            rb2d.AddForceAtPosition(direction.normalized * Mathf.Max((1f - Mathf.Pow(direction.magnitude/Dmax, 2f)) * Fmax, 0f),
-                position); //apply calulated (explosion) force at provided position
+            if (rb2d != null)
+            {
+                direction = rb2d.position - position; //get (un-normalized) direction vector
+                rb2d.AddForceAtPosition(direction.normalized * Mathf.Max((1f - Mathf.Pow(direction.magnitude/Dmax, 2f)) * Fmax, 0f),
+                    position); //apply calulated (explosion) force at provided position
+            }
         }
     }
 
     public void AddScore(int score)
     {
         currentScore += score; //increase the score
+        scoreText.text = currentScore.ToString(); //update the UI text with the new score
+    }
+
+    public int AddRigidBody(Rigidbody2D newRB)
+    {
+        rigidBodies[rigidBodiesCount] = newRB;
+        rigidBodiesCount++;
+        return rigidBodiesCount - 1;
     }
 }
