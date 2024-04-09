@@ -4,25 +4,25 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject bombObject; //prefab of the bomb
+    public int maxBombs; //bombs remaining, set to max bombs in the inspector
     public Rigidbody2D[] rigidBodies; //collection of all physics bodies
-    public int rigidBodiesCount = 0;
+    public int rigidBodiesCount = 0; //Current index in array (controlled by the script)
     public Canvas uiCanvas; //UI Canvas
     public TMP_Text scoreText; //Score text number
+    public TMP_Text bombText; //Bomb text number
 
-    private GameObject currentBomb;
-    private int currentScore = 0;
+    private GameObject currentBomb; //reference to the bomb that is about to be spawned
+    private int currentScore = 0; //current score
     private bool clickPong = false; //click pingpong
 
     void Start()
     {
-        //rigidBodies = new List<Rigidbody2D>(); //removed for testing.. later add to initalize list, then when a new
-        //rb is spawned please add code to add it's rb to this list, and add code to prune it when/if they are destroyed
-        rigidBodies = new Rigidbody2D[128];
+        rigidBodies = new Rigidbody2D[128]; //init
+        bombText.text = maxBombs.ToString(); //set the bomb count's inital text
     }
 
     void Update()
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         Vector2 mousePosition = Input.mousePosition; //get mouse pos
         if (Input.GetKeyDown(KeyCode.Mouse0)) //if clicked
         {
-            if (!clickPong)
+            if (!clickPong && maxBombs > 0)
             {
                 clickPong = true; //prevent spawning until click is released
                 Vector3 bombSpawnPos = Camera.main.ScreenToWorldPoint(mousePosition); //worldspace pos from screenspace
@@ -50,7 +50,9 @@ public class GameManager : MonoBehaviour
                 {
                     currentBomb.GetComponent<Bomb>().Activate(); //tell bomb to explode
                     currentBomb = null; //remove dangling pointer
-                    currentScore -= 5;
+                    maxBombs--; //use up a bomb
+                    AddScore(-5); //remove score
+                    bombText.text = maxBombs.ToString(); //update bomb remaining text
                 }
             }
         }
@@ -90,5 +92,10 @@ public class GameManager : MonoBehaviour
         rigidBodies[rigidBodiesCount] = newRB;
         rigidBodiesCount++;
         return rigidBodiesCount - 1;
+    }
+
+    private void EndLevel()
+    {
+        //carry all the code for ending the level, such as checking bomb remaining and giving extra score
     }
 }
