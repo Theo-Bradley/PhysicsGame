@@ -33,6 +33,7 @@ public class Pig : MonoBehaviour
                 Instantiate(breakParticles, transform.position, Quaternion.identity); //spawn particles where plank was
                 gameManager.AddScore(50); //increase score when pig is broken
                 gameManager.rigidBodies[gmIndex] = null; //remove rb from game manager array
+                gameManager.KillPig();
                 Destroy(gameObject); //remove pig
             }
         }
