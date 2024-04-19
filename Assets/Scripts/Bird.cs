@@ -1,17 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bird : MonoBehaviour
 {
-    public Rigidbody2D rigidBody;
-    private GameManager gameManager;
-    int gmIndex = -1;
-
-    void Start()
-    {
-        gameManager = FindObjectOfType<GameManager>(); //aquire the game manager
-    }
+    public GameManager gameManager; //scene's game manager
+    public Rigidbody2D rigidBody; //rb of the bird
+    public SpriteRenderer spriteRenderer; //sprite renderer on child
+    private int gmIndex = -1; //index of rb on game manager
 
     void Update()
     {
@@ -19,11 +13,16 @@ public class Bird : MonoBehaviour
         {
             gmIndex = gameManager.AddRigidBody(rigidBody); //add to array on game manager
         }
+    
         else
         {
-            //fill with standard running code
-            //when should destroy
-            //gameManager.rigidBodies[gmIndex] = null;
+            if (!spriteRenderer.isVisible) //if no longer on screen
+            {
+                rigidBody.velocity = Vector2.zero; //stop bird from moving
+                transform.position = Vector3.zero; //move back onscreen
+                gameManager.AddScore(-10); //remove some score
+
+            }
         }
     }
 }

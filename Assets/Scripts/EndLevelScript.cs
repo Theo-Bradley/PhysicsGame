@@ -1,28 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EndLevelScript : MonoBehaviour
 {
-    const int maxSceneIndex = 3;
+    const int maxSceneIndex = 3; //scene index of last playable level
 
-    public Canvas MenuCanvas; //end level menu canvas
+    public Canvas menuCanvas; //end level menu canvas
+    public GameObject nextButton; //UI next level button
     public RawImage starsImage; //stars UI element
     public Texture stars0; //image with no stars
     public Texture stars1; //image with 1 star
     public Texture stars2; //image with 2 stars
     public Texture stars3; //image with 3 stars
 
-    
+    private int currentSceneIndex; //current scene index (build settings)
     private GameManager gameManager; //reference to the game manager of the scene we are added to
 
     void Start()
     {
-        MenuCanvas.worldCamera = Camera.main; //get camera of the scene we are added to
+        menuCanvas.worldCamera = Camera.main; //get camera of the scene we are added to
+        menuCanvas.planeDistance = 4f; //move canvas infront of other rendering objects
         gameManager = FindObjectOfType<GameManager>(); //get the game manager of the scene we are added to
-        
+        currentSceneIndex = gameManager.sceneIndex; //get the scene index of the current level
         int numStars = gameManager.GetStarCount(); //get number of stars achieved
         switch (numStars)
         {
@@ -42,11 +42,13 @@ public class EndLevelScript : MonoBehaviour
                 starsImage.texture = stars0; //use image with no stars
                 break;
         }
+
+        if (currentSceneIndex >= maxSceneIndex) //if on the last level
+            nextButton.SetActive(false); //disable the next button
     }
 
     public void NextLevel()
     {
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex; //get current scene index (build settings)
         if (currentSceneIndex < maxSceneIndex) //if not maxed (there are more scenes to load)
             SceneManager.LoadScene(currentSceneIndex + 1, LoadSceneMode.Single); //increment index and load next scene
         else //if there are no more scenes to load

@@ -149,7 +149,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 125425132}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 272f5022ffaf1264f92ff2b319519e0b, type: 3}
+  m_Texture: {fileID: 2800000, guid: 426c8f6894861b646b46f2323e728b57, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -363,7 +363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e0e2f7e0bba2b4a908cd8c25b9ba56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuCanvas: {fileID: 301983857}
+  menuCanvas: {fileID: 301983857}
+  nextButton: {fileID: 1092501369}
   starsImage: {fileID: 125425134}
   stars0: {fileID: 2800000, guid: 426c8f6894861b646b46f2323e728b57, type: 3}
   stars1: {fileID: 2800000, guid: 8a97b6c316735bd45bb84dd50de135f0, type: 3}
@@ -883,7 +884,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211237693}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

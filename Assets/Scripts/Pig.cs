@@ -1,22 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pig : MonoBehaviour
 {
+    public GameManager gameManager; //scene game manager
     public Rigidbody2D rigidBody; //rb ob object
     public GameObject breakParticles; //prefab to spank when plank is broken
     public int hitPoints;
-    private GameManager gameManager; //scene game manager
     bool shouldBreak = false; //should the plank be broken
     int hitCount = 0;
     int gmIndex = -1;
-
-    void Start()
-    {
-        gameManager = FindObjectOfType<GameManager>(); //aquire the game manager
-    }
 
     void Update()
     {

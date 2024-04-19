@@ -1,21 +1,15 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject bombObject; //prefab of the bomb
-    public GameObject logPlatform; //reference to the plank platform object
     public int maxBombs; //bombs remaining, set to max bombs in the inspector
     public int pigCount; //amount of pigs in the scene, set to inital in the inspector
     public int maxScore; //set to the score required for 3 stars in the inspector
-    public Rigidbody2D[] rigidBodies; //collection of all physics bodies
+    public GameObject bombObject; //prefab of the bomb
+    public GameObject logPlatform; //reference to the plank platform object
     public int rigidBodiesCount = 0; //Current index in array (controlled by the script)
     public Canvas uiCanvas; //UI Canvas
     public TMP_Text scoreText; //Score text number
@@ -24,6 +18,8 @@ public class GameManager : MonoBehaviour
     public Image muteUIImage; //UI button for muting/unmuting the music
     public Sprite unmutedSprite; //sprite for the mute button (note icon)
     public Sprite mutedSprite; //sprite for the unmute button (struck through note icon)
+    public Rigidbody2D[] rigidBodies; //collection of all physics bodies
+    public int sceneIndex; //scene index of the current level
 
     private GameObject currentBomb; //reference to the bomb that is about to be spawned
     private int currentScore = 0; //current score
@@ -36,6 +32,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         rigidBodies = new Rigidbody2D[128]; //init
+        sceneIndex = SceneManager.GetActiveScene().buildIndex; //get the scene index of the currently loaded scene
         bombText.text = maxBombs.ToString(); //set the bomb count's inital text
         Vector3[] corners = new Vector3[4]; //initalize array to hold the mute button corners
         muteUIImage.rectTransform.GetWorldCorners(corners); //calculate corners and populate the array
@@ -51,7 +48,7 @@ public class GameManager : MonoBehaviour
             {
                 if (!clickPong && maxBombs > 0)
                 {
-                    Vector3 bombSpawnPos = Camera.main.ScreenToWorldPoint(mousePosition); //worldspace pos from screenspace
+                    Vector3 bombSpawnPos = Camera.main.ScreenToWorldPoint(mousePosition); //screenspace to worldspace pos
                     if (bombSpawnPos.x <= muteButtonPosition) //mouse is not over the mute button
                     {
                         bombSpawnPos = new Vector3(bombSpawnPos.x, bombSpawnPos.y); //remove z value
