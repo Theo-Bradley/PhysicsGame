@@ -1,11 +1,12 @@
-add code to calculate final score and stars when each level is finished
 add cod eto change next level button to say menu etc when currentSceneIndex >= maxIndex (no more levels)
+lower unused bomb reward
+replace object references with prefabs
 
 remove as many references to gameManager = FindObjectOfType<GameManager>(); //aquire the game manager
 	replace with reference from the inspector
 move any references assets from ext to the appropriate folder
 remove unreferenced assets from ext (excl. .xcf files etc)
+remove old using statements in scripts
 make levels
-add sound
-add other piece types
+add other birds
 

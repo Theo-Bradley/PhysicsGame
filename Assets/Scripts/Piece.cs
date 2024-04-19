@@ -7,6 +7,7 @@ public class Piece : MonoBehaviour
 {
     public Rigidbody2D rigidBody; //rb ob object
     public GameObject breakParticles; //prefab to spank when plank is broken
+    public float breakThresh; //required "force" to break
     private GameManager gameManager; //scene game manager
     bool shouldBreak = false; //should the plank be broken
     int gmIndex = -1; //my index in the rigidbodies array on game manager
@@ -24,7 +25,7 @@ public class Piece : MonoBehaviour
         }
         else
         {
-            if (rigidBody.velocity.magnitude >= 3f) //if moving sufficiently fast (simple force check)
+            if (rigidBody.velocity.magnitude >= breakThresh) //if moving sufficiently fast (simple force check)
                 shouldBreak = true; //start breaking code
             if (shouldBreak)
             {

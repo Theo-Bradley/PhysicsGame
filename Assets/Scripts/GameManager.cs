@@ -2,9 +2,11 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,21 +14,32 @@ public class GameManager : MonoBehaviour
     public GameObject logPlatform; //reference to the plank platform object
     public int maxBombs; //bombs remaining, set to max bombs in the inspector
     public int pigCount; //amount of pigs in the scene, set to inital in the inspector
+    public int maxScore; //set to the score required for 3 stars in the inspector
     public Rigidbody2D[] rigidBodies; //collection of all physics bodies
     public int rigidBodiesCount = 0; //Current index in array (controlled by the script)
     public Canvas uiCanvas; //UI Canvas
     public TMP_Text scoreText; //Score text number
     public TMP_Text bombText; //Bomb text number
+    public AudioSource musicSource; //AudioSource for the music
+    public Image muteUIImage; //UI button for muting/unmuting the music
+    public Sprite unmutedSprite; //sprite for the mute button (note icon)
+    public Sprite mutedSprite; //sprite for the unmute button (struck through note icon)
 
     private GameObject currentBomb; //reference to the bomb that is about to be spawned
     private int currentScore = 0; //current score
     private bool clickPong = false; //click pingpong
     private bool playingGame = true; //should the game be playing
+    private bool menuLatch = true; //can I spawn the end level menu?
+    private bool muted = false; //is the music muted?
+    private float muteButtonPosition; //the leftmost X position of the mute button
 
     void Start()
     {
         rigidBodies = new Rigidbody2D[128]; //init
         bombText.text = maxBombs.ToString(); //set the bomb count's inital text
+        Vector3[] corners = new Vector3[4]; //initalize array to hold the mute button corners
+        muteUIImage.rectTransform.GetWorldCorners(corners); //calculate corners and populate the array
+        muteButtonPosition = corners[0].x; //get the x pos of the bottom left corner for the button position
     }
 
     void Update()
@@ -38,12 +51,15 @@ public class GameManager : MonoBehaviour
             {
                 if (!clickPong && maxBombs > 0)
                 {
-                    clickPong = true; //prevent spawning until click is released
                     Vector3 bombSpawnPos = Camera.main.ScreenToWorldPoint(mousePosition); //worldspace pos from screenspace
-                    bombSpawnPos = new Vector3(bombSpawnPos.x, bombSpawnPos.y); //remove z value
-                    currentBomb = Instantiate(bombObject, //spawn a bomb
-                        bombSpawnPos, //at world pos of click
-                        Quaternion.identity); //with "no" rotation
+                    if (bombSpawnPos.x <= muteButtonPosition) //mouse is not over the mute button
+                    {
+                        bombSpawnPos = new Vector3(bombSpawnPos.x, bombSpawnPos.y); //remove z value
+                        currentBomb = Instantiate(bombObject, //spawn a bomb
+                            bombSpawnPos, //at world pos of click
+                            Quaternion.identity); //with "no" rotation
+                        clickPong = true; //prevent spawning until click is released
+                    }
                 }
             }
 
@@ -85,7 +101,11 @@ public class GameManager : MonoBehaviour
         }
         else
         { 
-            //load end scene into the current one
+            if (menuLatch) //if hasn't spawned a menu yet
+            {
+                SceneManager.LoadScene(1, LoadSceneMode.Additive); //load menu scene into this scene
+                menuLatch = false; //stop it from spawning again
+            }
         }
     }
 
@@ -129,13 +149,44 @@ public class GameManager : MonoBehaviour
 
     public int GetStarCount()
     {
-        //TODO: replace with code to get the number of stars achieved in the level
-        return 0;
+        if ((float) currentScore >= maxScore) //if we got the "max score"
+        {
+            return 3; //return 3 stars
+        }
+        if ((float) currentScore >= 0.66f * maxScore) //if we got most of the max score
+        {
+            return 2; //.. 2 stars
+        }
+        if ((float) currentScore >= 0.3f * maxScore) //if we only got some of the max score
+        {
+            return 1; //.. 1 ..
+        }
+
+        return 0; //if nothing else was returned return 0 stars
+    }
+
+    public void MuteButtonPressed()
+    {
+        if (muted) //if was muted
+        {
+            muteUIImage.sprite = unmutedSprite; //set the image to be unmuted
+            musicSource.mute = false; //unmute the audio
+            muted = false; //allow muting
+            return;
+        }
+        if (!muted) //if was unmuted
+        {
+            muteUIImage.sprite = mutedSprite; //set the image to muted
+            musicSource.mute = true; //mute the audio
+            muted = true; //allow unmuting
+            return;
+        }
     }
 
     private void EndLevel()
     {
         //carry all the code for ending the level, such as checking bomb remaining and giving extra score
-        Debug.Log("EndLvl");
+        AddScore(maxBombs * 10); //calculate score from bombs remaining
+        playingGame = false; //exit the main loop and display the end level menu
     }
 }

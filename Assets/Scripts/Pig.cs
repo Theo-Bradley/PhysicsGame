@@ -26,7 +26,7 @@ public class Pig : MonoBehaviour
         }
         else
         {
-            if (rigidBody.velocity.magnitude >= 3f) //if moving sufficiently fast (simple force check)
+            if (rigidBody.velocity.magnitude >= 2.5f) //if moving sufficiently fast (simple force check)
                 shouldBreak = true; //start breaking code
             if (shouldBreak)
             {

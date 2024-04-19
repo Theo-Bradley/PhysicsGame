@@ -173,3 +173,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 90800797994619199}
   breakParticles: {fileID: 696289734612900117, guid: 4ea97a8a87871f34187a4b73fcd2e7a5, type: 3}
+  breakThresh: 3
