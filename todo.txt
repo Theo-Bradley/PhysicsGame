@@ -3,3 +3,5 @@ replace object references with prefabs
 make levels
 add other birds
 add victory screen with particles
+add code to lose if pig is alive and you have no bombs,
+or just a restart button
