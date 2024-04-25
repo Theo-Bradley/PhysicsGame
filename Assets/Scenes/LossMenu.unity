@@ -254,7 +254,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Next
+  m_text: Retry
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ef3b11336baf13543ae42a4f2bdd2ba3, type: 2}
   m_sharedMaterial: {fileID: 2391076290282853075, guid: ef3b11336baf13543ae42a4f2bdd2ba3, type: 2}
@@ -363,6 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e0e2f7e0bba2b4a908cd8c25b9ba56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lostLevel: 1
   menuCanvas: {fileID: 301983857}
   nextButton: {fileID: 1092501369}
   starsImage: {fileID: 125425134}
@@ -737,7 +738,7 @@ GameObject:
   - component: {fileID: 1092501372}
   - component: {fileID: 1092501371}
   m_Layer: 5
-  m_Name: NextButton
+  m_Name: RetryButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -810,7 +811,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 301983854}
         m_TargetAssemblyTypeName: EndLevelScript, Assembly-CSharp
-        m_MethodName: NextLevel
+        m_MethodName: RetryLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

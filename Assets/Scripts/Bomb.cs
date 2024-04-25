@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
+    public GameObject explosionParticles; //refernce to the explosion particle prefab
     private GameManager gameManager;
     private GameObject bombSpriteObj;
-    private bool playAnim = false;
-    private float animStartTime = 0f;
-    private Material material;
+    private bool playAnim = false; //used for animation
+    private float animStartTime = 0f; //..
+    private Material material; //used to change the white level
 
     void Start()
     {
@@ -24,7 +25,8 @@ public class Bomb : MonoBehaviour
             if (fac >= 1.0f)
             {
                 gameManager.Explode(transform.position); //call func on game manager to apply explosion force in scene
-                //TO DO: add code to instantiate a bomb explosion particle system
+                Instantiate(explosionParticles, transform.position, Quaternion.identity); //spawn explosion particles
+                gameManager.UseBombAsync(); //decrease bomb counter
                 Destroy(gameObject); //remove me from scene
             }
         }

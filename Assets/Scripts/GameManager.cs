@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     public int maxScore; //set to the score required for 3 stars in the inspector
     public GameObject bombObject; //prefab of the bomb
     public GameObject logPlatform; //reference to the plank platform object
+    public Rigidbody2D birdRB; //refernce to the rigidbody of the bird in the scene
     public int rigidBodiesCount = 0; //Current index in array (controlled by the script)
     public Canvas uiCanvas; //UI Canvas
     public TMP_Text scoreText; //Score text number
@@ -44,6 +46,14 @@ public class GameManager : MonoBehaviour
         Vector2 mousePosition = Input.mousePosition; //get mouse pos
         if (playingGame)
         {
+            if (maxBombs <= 0 //if there are no bombs left
+                && pigCount >= 0 //and pigs remain
+                && birdRB.velocity.magnitude <= 0.5f //and bird isn't moving fast enough to break anything
+                && menuLatch) //and we havent spawned a menu yet
+            {
+                SceneManager.LoadScene(2, LoadSceneMode.Additive); //load in the lost menu
+                menuLatch = false; //only load once
+            }
             if (Input.GetKeyDown(KeyCode.Mouse0)) //if clicked
             {
                 if (!clickPong && maxBombs > 0)
@@ -74,9 +84,7 @@ public class GameManager : MonoBehaviour
                     {
                         currentBomb.GetComponent<Bomb>().Activate(); //tell bomb to explode
                         currentBomb = null; //remove dangling pointer
-                        maxBombs--; //use up a bomb
                         AddScore(-5); //remove score
-                        bombText.text = maxBombs.ToString(); //update bomb remaining text
                     }
                 }
             }
@@ -110,14 +118,14 @@ public class GameManager : MonoBehaviour
     {
         Vector2 direction;
         const float Dmax = 2f; //max distance //both of these values will change the gradient
-        const float Fmax = 200; //max force
+        const float Fmax = 4f; //max force
         foreach (Rigidbody2D rb2d in rigidBodies) //loop over rigidbodies
         {
             if (rb2d != null)
             {
                 direction = rb2d.position - position; //get (un-normalized) direction vector
                 rb2d.AddForceAtPosition(direction.normalized * Mathf.Max((1f - Mathf.Pow(direction.magnitude/Dmax, 2f)) * Fmax, 0f),
-                    position); //apply calulated (explosion) force at provided position
+                    position, ForceMode2D.Impulse); //apply calulated (explosion) force at provided position
             }
         }
     }
@@ -185,5 +193,25 @@ public class GameManager : MonoBehaviour
         //carry all the code for ending the level, such as checking bomb remaining and giving extra score
         AddScore(maxBombs * 10); //calculate score from bombs remaining
         playingGame = false; //exit the main loop and display the end level menu
+    }
+
+    public void UseBombAsync()
+    {
+        StartCoroutine(UseBombCoroutine()); //start coroutine on this object
+    }
+
+    public IEnumerator UseBombCoroutine()
+    {
+        yield return new WaitForSeconds(0.15f); //wait for bird to accelerate
+        UseBomb(); //subtract bomb
+        yield return null; //continue to next frame (basically exit coroutine)
+    }
+
+    public int UseBomb()
+    {
+        StopCoroutine(UseBombCoroutine()); //stop coroutine
+        maxBombs--; //use up a bomb
+        bombText.text = maxBombs.ToString(); //update bomb remaining text
+        return maxBombs; //return bombs remaining
     }
 }

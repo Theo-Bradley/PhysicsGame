@@ -6216,6 +6216,7 @@ MonoBehaviour:
   maxScore: 75
   bombObject: {fileID: 6293463451250802334, guid: b3e09c0260423874db90beb47d1020a8, type: 3}
   logPlatform: {fileID: 623242553}
+  birdRB: {fileID: 2063811381}
   rigidBodiesCount: 0
   uiCanvas: {fileID: 598029362}
   scoreText: {fileID: 805294353}

@@ -6358,11 +6358,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264d41c36b460a949b0addae3c57510e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxBombs: 5
+  maxBombs: 6
   pigCount: 1
-  maxScore: 75
+  maxScore: 70
   bombObject: {fileID: 6293463451250802334, guid: b3e09c0260423874db90beb47d1020a8, type: 3}
   logPlatform: {fileID: 623242553}
+  birdRB: {fileID: 0}
   rigidBodiesCount: 0
   uiCanvas: {fileID: 598029362}
   scoreText: {fileID: 805294353}

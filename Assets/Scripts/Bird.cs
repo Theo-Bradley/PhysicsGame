@@ -19,8 +19,9 @@ public class Bird : MonoBehaviour
             if (!spriteRenderer.isVisible) //if no longer on screen
             {
                 rigidBody.velocity = Vector2.zero; //stop bird from moving
+                rigidBody.angularVelocity = 0; //stop spinning
                 transform.position = Vector3.zero; //move back onscreen
-                gameManager.AddScore(-10); //remove some score
+                gameManager.AddScore(-25); //remove some score
 
             }
         }
