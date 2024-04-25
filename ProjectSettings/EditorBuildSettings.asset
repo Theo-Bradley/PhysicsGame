@@ -14,10 +14,40 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LossMenu.unity
     guid: 1015e6fc97c3a004ebc7df77591cac6c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
     path: Assets/Scenes/SampleScene - Copy.unity
     guid: 6204a3763de919844be5611a35bcf42c
+  - enabled: 1
+    path: Assets/Scenes/L1.unity
+    guid: 0f2c2b5458e258f40a2eb2b661fe3aa3
+  - enabled: 1
+    path: Assets/Scenes/L2.unity
+    guid: cbe68098c62c5134f9984925bdade251
+  - enabled: 1
+    path: Assets/Scenes/L3.unity
+    guid: 7b6708ed77885d14c809e15740c8c60b
+  - enabled: 1
+    path: Assets/Scenes/L4.unity
+    guid: 9bc2e9af45d735146bc27a852eb124f1
+  - enabled: 1
+    path: Assets/Scenes/L5.unity
+    guid: 614f0a14ff3e65f4385a29b027046567
+  - enabled: 1
+    path: Assets/Scenes/L6.unity
+    guid: 5234739382d7b0240a021a19e20e8039
+  - enabled: 1
+    path: Assets/Scenes/L7.unity
+    guid: 96cbfd3efddab2e43ab6a4ec73962a6b
+  - enabled: 1
+    path: Assets/Scenes/L8.unity
+    guid: 3959c55b5c9fc27498d5050adf5a204b
+  - enabled: 1
+    path: Assets/Scenes/L9.unity
+    guid: 76c103a3cb9dd174aa8e37a5b5417951
+  - enabled: 1
+    path: Assets/Scenes/L10.unity
+    guid: 3260cc4ecad594d4187b60684f5684e3
   m_configObjects: {}

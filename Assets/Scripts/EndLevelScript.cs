@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class EndLevelScript : MonoBehaviour
 {
-    const int maxSceneIndex = 3; //scene index of last playable level
+    const int maxSceneIndex = 12; //scene index of last playable level
 
     public bool lostLevel; //set in inspector
     public Canvas menuCanvas; //end level menu canvas
